@@ -60,7 +60,34 @@ const userController = {
     } else {
       res.status(403).send("You are not authorized to perform this action");
     }
-  }
+  },
+  
+  //CHANGE A USER'S PASSWORD
+  changeUserPassword: async (req, res) => {
+    try {
+      const user = await User.findById(req.params.id);
+      if (!user) return res.status(404).send("User not found");
+
+      // check if current password is valid
+      const validPassword = await bcrypt.compare(
+        req.body.currentPassword,
+        user.password
+      );
+      if (!validPassword)
+        return res.status(400).send("Current password is not valid");
+
+      // hash and update new password
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(req.body.newPassword, salt);
+      user.password = hashedPassword;
+      await user.save();
+
+      res.status(200).send("Password updated successfully");
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Internal server error");
+    }
+  },
 };
 
 module.exports = userController;
