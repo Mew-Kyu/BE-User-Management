@@ -25,4 +25,7 @@ router.put("/:id/update", verifyTokenAndUser, userController.updateUser);
 // UPDATE USER ROLE
 router.put("/:id/update-role", verifyTokenAndUserAuthorization, userController.updateUserRole);
 
+//CHANGE A USER'S PASSWORD
+router.put("/:id/change-password", verifyTokenAndUser, userController.changeUserPassword);
+
 module.exports = router;
