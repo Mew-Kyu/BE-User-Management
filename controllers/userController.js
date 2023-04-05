@@ -39,7 +39,7 @@ const userController = {
       await User.findByIdAndUpdate(req.params.id, req.body);
       res.status(200).json("User updated");
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json("Username or email already exists");
     }
   },
 
